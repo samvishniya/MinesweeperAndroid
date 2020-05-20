@@ -34,8 +34,10 @@
 
         app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/simpleChronometer">
+        app:layout_constraintTop_toBottomOf="@+id/simpleChronometer"
+        app:layout_constraintVertical_bias="0.93">
 
 
     </TableLayout>
@@ -51,6 +53,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.926" />
 
+
+    <!-- actionsend allows the edittext to perform a send function, using enter (once coded in java) -->
     <EditText
         android:id="@+id/chooseGameSizeText"
         android:layout_width="wrap_content"
@@ -58,7 +62,12 @@
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/_3_20"
-        android:inputType="numberDecimal"
+
+
+        android:inputType="number"
+
+        android:maxLength="2"
+        android:singleLine="true"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/tableForButtons"
         app:layout_constraintEnd_toEndOf="@+id/tableForButtons"
@@ -74,6 +83,20 @@
         app:layout_constraintEnd_toEndOf="@+id/tableForButtons"
         app:layout_constraintStart_toStartOf="@+id/tableForButtons"
         app:layout_constraintTop_toTopOf="@id/tableForButtons" />
+
+    <Button
+        android:id="@+id/submitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:clickable="true"
+        android:text="@string/submit"
+        app:layout_constraintBottom_toBottomOf="@+id/tableForButtons"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tableForButtons"
+        app:layout_constraintTop_toBottomOf="@+id/chooseGameSizeText"
+        app:layout_constraintVertical_bias="0.19999999"
+        android:focusable="true" />
 
 
 </android.support.constraint.ConstraintLayout>
