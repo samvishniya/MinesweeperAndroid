@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import Logic.InputFilterMinMax;
 
@@ -30,7 +31,10 @@ public class MainActivity extends AppCompatActivity {
     private ViewGroup layout;
 
 
-
+// TODO add reset button to go again
+    // TODO ADD functionality to reset after game over
+    // TODO INTEGRATE WITH HIGHSCORE database
+    // TODO TEST MINEFIELD
 
     private int gridSquaresCount;
 
@@ -196,27 +200,28 @@ public class MainActivity extends AppCompatActivity {
 
             for (int columnNum = 0; columnNum <= gridSize - 1; columnNum++) {
 
-                String imageButtonName = "imageButton" + "Row" + (rowNum+1) + "Column"+(columnNum+1);
-                System.out.println(imageButtonName);
-                ImageButton imageButton = new ImageButton(this);
+               // String imageButtonName = "imageButton" + "Row" + (rowNum+1) + "Column"+(columnNum+1);
+                //System.out.println(imageButtonName);
+                ImageButton cellBtn = new ImageButton(this);
 
                 // ".setimageDrawable" requires a drawable object
                 // usually just grabbing getdrawable gets an int code for that thing
                 // so we have to convert to a drawable
                 Drawable newCell = getResources().getDrawable(R.drawable.gridsquare4040);
-                imageButton.setImageDrawable(newCell);
+                cellBtn.setImageDrawable(newCell);
 
 
 // todo sort out margins
-                imageButton.setOnClickListener(new View.OnClickListener() {
+                cellBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
 
                     }
                 });
 
              //   tableRow.set
-                tableRow.addView(imageButton,params);
+                tableRow.addView(cellBtn,params);
             }
             table.addView(tableRow,params);
         }
