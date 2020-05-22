@@ -1,5 +1,6 @@
 package com.example.vishniya.minesweeperandroid;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -139,44 +140,74 @@ public class MainActivity extends AppCompatActivity {
     }
 
 */
+/*
+    private boolean getUserInputGridSize() {
+
+        final EditText userInputField = (EditText) findViewById(R.id.chooseGameSizeText);
+
+        userInputField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+                                                     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                                                         boolean handled = false;
+
+
+                                                         if (actionId == EditorInfo.IME_ACTION_SEND) {
+
+                                                             Editable gridSize = userInputField.getText();
+                                                             int gridSizeNumber = Integer.valueOf(userInputField.getText().toString());
+                                                             populateButtons(gridSizeNumber);
+                                                             handled = true;
+                                                         }
+                                                         return handled;
+
+                                                     }
+                                                 });
+
+
+
+        return true;
+
+
+    }
+
+*/
 
 
     private void populateButtons(int gridSize) {
 
 
         TableLayout table =  findViewById(R.id.tableForButtons);
-
+       // table.setStretchAllColumns(true);
         gridSquaresCount=gridSize*gridSize;
 
 
         for (int rowNum = 0; rowNum <= gridSize - 1; rowNum++) {
             TableRow tableRow = new TableRow(this);
-            tableRow.setLayoutParams(new TableLayout.LayoutParams(
-                    TableLayout.LayoutParams.MATCH_PARENT,
-                    TableLayout.LayoutParams.MATCH_PARENT,
-                    1.0f
-            ));
-            table.addView(tableRow);
+           // tableRow.setPadding(0,0,0,0);
+
+            TableRow.LayoutParams params = new TableRow.LayoutParams(
+                    TableRow.LayoutParams.MATCH_PARENT,
+                    TableRow.LayoutParams.MATCH_PARENT,
+                    1.0f);
+
+            tableRow.setLayoutParams(params);
+            params.setMargins(1,1,1,1);
+
+
             for (int columnNum = 0; columnNum <= gridSize - 1; columnNum++) {
 
                 String imageButtonName = "imageButton" + "Row" + (rowNum+1) + "Column"+(columnNum+1);
                 System.out.println(imageButtonName);
                 ImageButton imageButton = new ImageButton(this);
 
+                // ".setimageDrawable" requires a drawable object
+                // usually just grabbing getdrawable gets an int code for that thing
+                // so we have to convert to a drawable
+                Drawable newCell = getResources().getDrawable(R.drawable.gridsquare4040);
+                imageButton.setImageDrawable(newCell);
 
-                TableRow.LayoutParams params = new TableRow.LayoutParams(
-                        TableRow.LayoutParams.MATCH_PARENT,
-                        TableRow.LayoutParams.MATCH_PARENT,
 
-                        1.0f);
 // todo sort out margins
-                params.setMargins(1,1,1,1);
-
-                imageButton.setLayoutParams(params);
-
-
-
-
                 imageButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -184,9 +215,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-
-                tableRow.addView(imageButton);
+             //   tableRow.set
+                tableRow.addView(imageButton,params);
             }
+            table.addView(tableRow,params);
         }
 
     }
