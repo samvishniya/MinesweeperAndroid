@@ -25,22 +25,34 @@ public class Minefield {
             generateMine();
         }
 
+        setCellImages();
     }
 
     // creation of 2d array of minecells
     // using a table NOT a grid, so start at top left , 1,1 is top left
 
-// TODO try to handle all location information of cells, outside of minecell class i.e keep inside this class
+
+
+
+    public Minecell getCellContent(int row, int column){
+
+        return fieldArray[row][column];
+
+    }
+
+
 
     private void createMinefield(){
 
-        // the array address tells you the location
+        // creates non-mined minecells and tells them their location in the grid (Point)
         // TODO none of this is added to ui... do that later
 
         for(int rowNum=1; rowNum<=dimension;rowNum++){
 
             for(int columnNum = 1;columnNum<=dimension;columnNum++) {
-                fieldArray[rowNum][columnNum]= new Minecell();
+
+
+                fieldArray[rowNum][columnNum]= new Minecell(new Point(rowNum,columnNum));
 
 
             }
@@ -95,6 +107,23 @@ public class Minefield {
 
 
     }
+    // sets actual cell image according to amount of neighbouring mines
+    public void setCellImages(){
+
+        // 2d array version of for-each loop ( the outer loop goes through each (row) minecell array,
+        // inner loop goes through the objects stored inside each array (column))
+// todo practice streams inplace of foreach loop
+
+        for(Minecell[] row : fieldArray){
+            for (Minecell cell: row){
+                cell.setActualCellImage();
+            }
+
+        }
+
+
+    }
+
 
 
 

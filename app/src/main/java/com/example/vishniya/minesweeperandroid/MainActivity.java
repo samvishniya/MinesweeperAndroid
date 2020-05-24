@@ -17,6 +17,8 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import Logic.InputFilterMinMax;
+import Logic.Minecell;
+import Logic.Minefield;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -180,9 +182,11 @@ public class MainActivity extends AppCompatActivity {
     private void populateButtons(int gridSize) {
 
 
-        TableLayout table =  findViewById(R.id.tableForButtons);
+         TableLayout table =  findViewById(R.id.tableForButtons);
        // table.setStretchAllColumns(true);
         gridSquaresCount=gridSize*gridSize;
+        final Minefield gameMineField = new Minefield(gridSize);
+
 
 
         for (int rowNum = 0; rowNum <= gridSize - 1; rowNum++) {
@@ -202,21 +206,38 @@ public class MainActivity extends AppCompatActivity {
 
                // String imageButtonName = "imageButton" + "Row" + (rowNum+1) + "Column"+(columnNum+1);
                 //System.out.println(imageButtonName);
-                ImageButton cellBtn = new ImageButton(this);
+                final ImageButton cellBtn = new ImageButton(this);
 
                 // ".setimageDrawable" requires a drawable object
                 // usually just grabbing getdrawable gets an int code for that thing
                 // so we have to convert to a drawable
-                Drawable newCell = getResources().getDrawable(R.drawable.gridsquare4040);
-                cellBtn.setImageDrawable(newCell);
+
+// TODO MOVE THE CELLIMAGES INTO THE Minecell object if possible
+                // where to store these images?
+                Drawable defaultCellImage = getResources().getDrawable(R.drawable.gridsquare4040);
+
+                cellBtn.setImageDrawable(defaultCellImage);
+
 
 
 // todo sort out margins
+                // todo watch out for finals causing weird stuiff
+                // had to make temp final ints in order to use the inner class below (onclick)
+                final int finalRowNum = rowNum;
+                final int finalColumnNum = columnNum;
                 cellBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
+                     // disable button from more clicsk
+                     cellBtn.setEnabled(false);
 
+                    gameMineField.getCellContent(finalRowNum, finalColumnNum).togglePressed();
+
+                    // now just tell the cell its been clicked, itll do the rest
+
+
+                  //  revealCell(gameMineField.getCellContent(finalRowNum, finalColumnNum));
                     }
                 });
 
@@ -227,6 +248,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
 
 
 }
