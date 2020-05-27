@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -185,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
          TableLayout table =  findViewById(R.id.tableForButtons);
        // table.setStretchAllColumns(true);
         gridSquaresCount=gridSize*gridSize;
-        final Minefield gameMineField = new Minefield(gridSize);
+        final Minefield gameMineField = new Minefield(gridSize, this);
 
 
 
@@ -206,7 +207,13 @@ public class MainActivity extends AppCompatActivity {
 
                // String imageButtonName = "imageButton" + "Row" + (rowNum+1) + "Column"+(columnNum+1);
                 //System.out.println(imageButtonName);
-                final ImageButton cellBtn = new ImageButton(this);
+                final ImageView cellBtn = (gameMineField.getCellContent(rowNum,columnNum).getActualCellImage());
+               // new ImageView(this);
+
+           //     ImageView defaultCellImage =
+
+
+
 
                 // ".setimageDrawable" requires a drawable object
                 // usually just grabbing getdrawable gets an int code for that thing
@@ -214,10 +221,11 @@ public class MainActivity extends AppCompatActivity {
 
 // TODO MOVE THE CELLIMAGES INTO THE Minecell object if possible
                 // where to store these images?
+                /*
                 Drawable defaultCellImage = getResources().getDrawable(R.drawable.gridsquare4040);
 
                 cellBtn.setImageDrawable(defaultCellImage);
-
+*/
 
 
 // todo sort out margins
@@ -225,14 +233,14 @@ public class MainActivity extends AppCompatActivity {
                 // had to make temp final ints in order to use the inner class below (onclick)
                 final int finalRowNum = rowNum;
                 final int finalColumnNum = columnNum;
-                cellBtn.setOnClickListener(new View.OnClickListener() {
+                cellBtn.setOnClickListener(new ImageView.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
                      // disable button from more clicsk
-                     cellBtn.setEnabled(false);
+                  //   cellBtn.setEnabled(false);
 
-                    gameMineField.getCellContent(finalRowNum, finalColumnNum).togglePressed();
+                //    gameMineField.getCellContent(finalRowNum, finalColumnNum).togglePressed();
 
                     // now just tell the cell its been clicked, itll do the rest
 
