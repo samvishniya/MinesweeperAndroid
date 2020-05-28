@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
 
                // String imageButtonName = "imageButton" + "Row" + (rowNum+1) + "Column"+(columnNum+1);
                 //System.out.println(imageButtonName);
-                final ImageView cellBtn = (gameMineField.getCellContent(rowNum,columnNum).getActualCellImage());
+                final ImageView cellBtn = (gameMineField.getCellContent(rowNum,columnNum).getDisplayedImage());
                // new ImageView(this);
 
            //     ImageView defaultCellImage =
@@ -227,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
                 cellBtn.setImageDrawable(defaultCellImage);
 */
 
-
+// todo sort out how to toggle image see google
 // todo sort out margins
                 // todo watch out for finals causing weird stuiff
                 // had to make temp final ints in order to use the inner class below (onclick)
@@ -239,8 +239,8 @@ public class MainActivity extends AppCompatActivity {
 
                      // disable button from more clicsk
                   //   cellBtn.setEnabled(false);
-
-                //    gameMineField.getCellContent(finalRowNum, finalColumnNum).togglePressed();
+                    cellBtn.setClickable(false);
+                    gameMineField.getCellContent(finalRowNum, finalColumnNum).togglePressed();
 
                     // now just tell the cell its been clicked, itll do the rest
 
