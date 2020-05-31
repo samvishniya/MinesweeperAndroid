@@ -49,7 +49,7 @@ public class Minecell {
     // this is the only way ive found to get a resource outside of an activity (using getSystem(
 
     private ImageView defaultCellImage;
-
+    
     // Drawable defaultCellImage= R.drawable.gridsquare4040;e
     private ImageView actualCellImage;
     private ImageView displayedImage;
@@ -129,11 +129,12 @@ handle the images inside an activity, getresoureces doesnt work outside of an ac
 
     public void setActualCellImage() {
 
-
+        actualCellImage=  new ImageView(context);
 
         if (isHasMine()) {
 
             actualCellImage.setImageResource(R.drawable.gridsquaremine);
+
         } else {
 
            // actualCellImage.setImageResource(R.drawable.gridsquare1big);
@@ -208,15 +209,20 @@ handle the images inside an activity, getresoureces doesnt work outside of an ac
 
     public ImageView getDisplayedImage() {
         return displayedImage;
+
     }
 
     public void togglePressed() {
         pressed = !pressed;
         if (pressed) {
+            System.out.println("press detection working");
             displayedImage = actualCellImage;
+
         }
         else  {
             displayedImage=defaultCellImage;
+
+
         }
     }
 

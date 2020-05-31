@@ -191,10 +191,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         for (int rowNum = 0; rowNum <= gridSize - 1; rowNum++) {
-            TableRow tableRow = new TableRow(this);
+            final TableRow tableRow = new TableRow(this);
            // tableRow.setPadding(0,0,0,0);
 
-            TableRow.LayoutParams params = new TableRow.LayoutParams(
+            final TableRow.LayoutParams params = new TableRow.LayoutParams(
                     TableRow.LayoutParams.MATCH_PARENT,
                     TableRow.LayoutParams.MATCH_PARENT,
                     1.0f);
@@ -214,19 +214,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-                // ".setimageDrawable" requires a drawable object
-                // usually just grabbing getdrawable gets an int code for that thing
-                // so we have to convert to a drawable
-
-// TODO MOVE THE CELLIMAGES INTO THE Minecell object if possible
-                // where to store these images?
-                /*
-                Drawable defaultCellImage = getResources().getDrawable(R.drawable.gridsquare4040);
-
-                cellBtn.setImageDrawable(defaultCellImage);
-*/
-
 // todo sort out how to toggle image see google
 // todo sort out margins
                 // todo watch out for finals causing weird stuiff
@@ -237,15 +224,17 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
 
-                     // disable button from more clicsk
-                  //   cellBtn.setEnabled(false);
-                    cellBtn.setClickable(false);
-                    gameMineField.getCellContent(finalRowNum, finalColumnNum).togglePressed();
-
-                    // now just tell the cell its been clicked, itll do the rest
 
 
-                  //  revealCell(gameMineField.getCellContent(finalRowNum, finalColumnNum));
+
+                        // toggle first, then get new image, then disable clickable
+                        gameMineField.getCellContent(finalRowNum, finalColumnNum).togglePressed();
+
+                        ImageView cellBtn2 = gameMineField.getCellContent(finalRowNum,finalColumnNum).getDisplayedImage();
+
+                        cellBtn2.setClickable(false);
+
+                        tableRow.addView(cellBtn2);
                     }
                 });
 

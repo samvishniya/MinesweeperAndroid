@@ -40,7 +40,6 @@ public class Minefield {
 
         setCellImages();
         //mapImagesOntoButtons();
-        System.out.println(listOfMines);
     }
 
     // creation of 2d array of minecells
@@ -88,7 +87,7 @@ public class Minefield {
             currentMine.setHasMine(true);
             listOfMines.add(mineCoord);
             mineCreationCount++;
-            System.out.println("mine generated at " + "[" + randomNum1 + "]" + "[" + randomNum2 + "]");
+          //  System.out.println("mine generated at " + "[" + randomNum1 + "]" + "[" + randomNum2 + "]");
 
 
         // this loop checks for adjacent cells and ++s their mineadjacencycounter
@@ -103,9 +102,9 @@ public class Minefield {
                 // check for >=1 , ensures that were staying inside bounds of minefield, since mine could be topleft,
                 // and we could be trying to look to the left of it
                 if (randomNum1 + x >= 0 && randomNum1 + x <= dimension - 1 && randomNum2 + y <= dimension - 1 && randomNum2 +y >= 0) {
-                    System.out.print("Adding to mine adjcounter at ");
-                    System.out.print(randomNum1 + x);
-                    System.out.println(randomNum2 + y);
+                  //  System.out.print("Adding to mine adjcounter at ");
+                  //  System.out.print(randomNum1 + x);
+                   // System.out.println(randomNum2 + y);
                     fieldArray[randomNum1 + x][randomNum2 + y].incrementAdjacentMineCounter();
 
 
