@@ -12,6 +12,7 @@ import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 // TODO add reset button to go again
     // TODO ADD functionality to reset after game over
     // TODO INTEGRATE WITH HIGHSCORE database
-    // TODO TEST MINEFIELD
+
 
     private int gridSquaresCount;
 
@@ -183,40 +184,60 @@ public class MainActivity extends AppCompatActivity {
     private void populateButtons(int gridSize) {
 
 
-         TableLayout table =  findViewById(R.id.tableForButtons);
-       // table.setStretchAllColumns(true);
+
         gridSquaresCount=gridSize*gridSize;
         final Minefield gameMineField = new Minefield(gridSize, this);
 
 
+     //   table.setShrinkAllColumns(true);
+
+      //  table.setStretchAllColumns(true);
+
+      //  table.layout
+        TableLayout table =  findViewById(R.id.tableForButtons);
+        ConstraintLayout.LayoutParams tableParams = new ConstraintLayout.LayoutParams(
+
+                ConstraintLayout.LayoutParams.MATCH_PARENT,
+                TableLayout.LayoutParams.WRAP_CONTENT
+
+
+
+        );
+
+                table.setLayoutParams(tableParams);
 
         for (int rowNum = 0; rowNum <= gridSize - 1; rowNum++) {
-            final TableRow tableRow = new TableRow(this);
-           // tableRow.setPadding(0,0,0,0);
+             TableRow tableRow = new TableRow(this);
 
-            final TableRow.LayoutParams params = new TableRow.LayoutParams(
-                    TableRow.LayoutParams.MATCH_PARENT,
-                    TableRow.LayoutParams.MATCH_PARENT,
-                    1.0f);
+
+
+            final TableLayout.LayoutParams params = new TableLayout.LayoutParams(
+
+                    TableLayout.LayoutParams.WRAP_CONTENT,
+                    TableLayout.LayoutParams.WRAP_CONTENT
+
+
+
+                    );
+
+
 
             tableRow.setLayoutParams(params);
-            params.setMargins(1,1,1,1);
 
+           // params.setMargins(1,0,0,0);
+         //   tableRow.setPadding(1,1,1,1);
 
             for (int columnNum = 0; columnNum <= gridSize - 1; columnNum++) {
 
                // String imageButtonName = "imageButton" + "Row" + (rowNum+1) + "Column"+(columnNum+1);
                 //System.out.println(imageButtonName);
-                final ImageView cellBtn = (gameMineField.getCellContent(rowNum,columnNum).getDisplayedImage());
-               // new ImageView(this);
+                 ImageView cellBtn = (gameMineField.getCellContent(rowNum,columnNum).getDisplayedImage());
+               cellBtn.setScaleType(ImageView.ScaleType.FIT_XY);
 
-           //     ImageView defaultCellImage =
+              //  cellBtn.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
-
-
-// todo sort out how to toggle image see google
 // todo sort out margins
-                // todo watch out for finals causing weird stuiff
+                // watch out for finals causing weird stuiff
                 // had to make temp final ints in order to use the inner class below (onclick)
                 final int finalRowNum = rowNum;
                 final int finalColumnNum = columnNum;
@@ -230,16 +251,12 @@ public class MainActivity extends AppCompatActivity {
                         // toggle first, then get new image, then disable clickable
                         gameMineField.getCellContent(finalRowNum, finalColumnNum).togglePressed();
 
-                        ImageView cellBtn2 = gameMineField.getCellContent(finalRowNum,finalColumnNum).getDisplayedImage();
 
-                        cellBtn2.setClickable(false);
-
-                        tableRow.addView(cellBtn2);
                     }
                 });
 
              //   tableRow.set
-                tableRow.addView(cellBtn,params);
+                tableRow.addView(cellBtn);
             }
             table.addView(tableRow,params);
         }

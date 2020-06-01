@@ -48,10 +48,10 @@ public class Minecell {
     };
     // this is the only way ive found to get a resource outside of an activity (using getSystem(
 
-    private ImageView defaultCellImage;
-    
+
+
     // Drawable defaultCellImage= R.drawable.gridsquare4040;e
-    private ImageView actualCellImage;
+
     private ImageView displayedImage;
     // private ImageIcon
     // border?//
@@ -76,11 +76,9 @@ handle the images inside an activity, getresoureces doesnt work outside of an ac
         this.rowColumn = rowColumn;
 
         adjacentMineCounter=0;
-        defaultCellImage = new ImageView(context);
+        displayedImage = new ImageView(context);
 
-        defaultCellImage.setImageResource(R.drawable.gridsquare4040);
-
-        displayedImage=defaultCellImage;
+        displayedImage.setImageResource(R.drawable.gridsquare4040);
 
     }
 
@@ -124,21 +122,20 @@ handle the images inside an activity, getresoureces doesnt work outside of an ac
         }
     }
 
-    // todo trying to dynamically set the cellimage using the number of adjacent mines to set the correct image
-    //
 
-    public void setActualCellImage() {
 
-        actualCellImage=  new ImageView(context);
+    private void setActualCellImage() {
+
+
 
         if (isHasMine()) {
 
-            actualCellImage.setImageResource(R.drawable.gridsquaremine);
+            displayedImage.setImageResource(R.drawable.gridsquaremine);
 
         } else {
 
            // actualCellImage.setImageResource(R.drawable.gridsquare1big);
-            actualCellImage.setImageResource(mCellIcons[adjacentMineCounter]);
+            displayedImage.setImageResource(mCellIcons[adjacentMineCounter]);
 
         /*
         switch(adjacentMineCounter){
@@ -215,15 +212,11 @@ handle the images inside an activity, getresoureces doesnt work outside of an ac
     public void togglePressed() {
         pressed = !pressed;
         if (pressed) {
-            System.out.println("press detection working");
-            displayedImage = actualCellImage;
+           // System.out.println("press detection working");
+            setActualCellImage();
 
         }
-        else  {
-            displayedImage=defaultCellImage;
 
-
-        }
     }
 
 
