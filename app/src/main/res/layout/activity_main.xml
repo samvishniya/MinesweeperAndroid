@@ -19,27 +19,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.786" />
 
-    <TableLayout
-        android:id="@+id/tableForButtons"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="2dp"
-        android:layout_marginLeft="6dp"
-        android:layout_marginEnd="2dp"
-        android:layout_marginRight="6dp"
-        android:gravity="center"
 
 
-
-        app:layout_constraintBottom_toTopOf="@+id/textView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timer"
-        app:layout_constraintVertical_bias="0.93">
-
-
-    </TableLayout>
 
 
     <!-- actionsend allows the edittext to perform a send function, using enter (once coded in java) -->
@@ -61,21 +42,21 @@
         android:id="@+id/chooseGameSizeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="372dp"
         android:autofillHints=""
         android:ems="10"
+
+
         android:hint="@string/_3_20"
 
-
         android:inputType="number"
-
         android:maxLength="2"
         android:singleLine="true"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.525"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tableForButtons"
+        app:layout_constraintTop_toBottomOf="@+id/gridSizeQuestionText"
         app:layout_constraintVertical_bias="0.453" />
 
     <TextView
@@ -86,9 +67,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.605"
-        app:layout_constraintStart_toStartOf="@+id/tableForButtons"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.45" />
+        app:layout_constraintVertical_bias="0.298" />
 
     <Button
         android:id="@+id/submitButton"
@@ -97,11 +78,28 @@
         android:clickable="true"
         android:focusable="true"
         android:text="@string/submit"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/tableForButtons"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chooseGameSizeText"
-        app:layout_constraintVertical_bias="0.19999999" />
+        app:layout_constraintVertical_bias="0.348" />
+
+    <android.support.v7.widget.GridLayout
+        android:id="@+id/xmlGrid"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timer"
+        app:layout_constraintVertical_bias="0.535">
+
+    </android.support.v7.widget.GridLayout>
 
 
 </android.support.constraint.ConstraintLayout>

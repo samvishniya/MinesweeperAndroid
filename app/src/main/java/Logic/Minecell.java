@@ -78,8 +78,8 @@ handle the images inside an activity, getresoureces doesnt work outside of an ac
         adjacentMineCounter=0;
         displayedImage = new ImageView(context);
 
-        displayedImage.setImageResource(R.drawable.gridsquare4040);
-
+       // displayedImage.setImageResource(R.drawable.gridsquare4040);
+        displayedImage.setBackgroundResource(R.drawable.gridsquare4040);
     }
 
 
@@ -130,12 +130,12 @@ handle the images inside an activity, getresoureces doesnt work outside of an ac
 
         if (isHasMine()) {
 
-            displayedImage.setImageResource(R.drawable.gridsquaremine);
+            displayedImage.setBackgroundResource(R.drawable.gridsquaremine);
 
         } else {
 
            // actualCellImage.setImageResource(R.drawable.gridsquare1big);
-            displayedImage.setImageResource(mCellIcons[adjacentMineCounter]);
+            displayedImage.setBackgroundResource(mCellIcons[adjacentMineCounter]);
 
         /*
         switch(adjacentMineCounter){
@@ -205,6 +205,9 @@ handle the images inside an activity, getresoureces doesnt work outside of an ac
     }
 
     public ImageView getDisplayedImage() {
+
+       // displayedImage.setAdjustViewBounds(true);
+       // displayedImage.setScaleType(ImageView.ScaleType.FIT_XY);
         return displayedImage;
 
     }

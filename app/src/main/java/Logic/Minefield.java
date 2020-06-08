@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
+import android.support.v4.widget.ImageViewCompat;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
 import java.lang.reflect.Array;
@@ -31,6 +34,8 @@ public class Minefield {
         totalMinesNeeded=dimension;
         fieldArray = new Minecell[dimension][dimension];
         listOfMines = new ArrayList();
+
+
 
         createMinefield();
 
