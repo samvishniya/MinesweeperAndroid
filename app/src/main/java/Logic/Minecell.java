@@ -1,20 +1,11 @@
 package Logic;
 
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
-import android.content.res.Resources;
+
 import android.graphics.Point;
 
-import android.graphics.drawable.Drawable;
-import android.location.Location;
-import android.media.Image;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
-import android.text.Layout;
-import android.view.View;
+
 import android.widget.ImageView;
-import android.widget.TableRow;
-import android.widget.ToggleButton;
 
 import com.example.vishniya.minesweeperandroid.R;
 
@@ -25,7 +16,7 @@ import java.lang.reflect.Method;
 public class Minecell {
 
 
-    Context context;
+    private Context context;
     private boolean hasMine = false;
     // holds
     private Point rowColumn;
@@ -47,7 +38,6 @@ public class Minecell {
 
     };
     // this is the only way ive found to get a resource outside of an activity (using getSystem(
-
 
 
     // Drawable defaultCellImage= R.drawable.gridsquare4040;e
@@ -75,11 +65,11 @@ handle the images inside an activity, getresoureces doesnt work outside of an ac
 
         this.rowColumn = rowColumn;
 
-        adjacentMineCounter=0;
+        adjacentMineCounter = 0;
         displayedImage = new ImageView(context);
 
-       // displayedImage.setImageResource(R.drawable.gridsquare4040);
-        displayedImage.setBackgroundResource(R.drawable.gridsquare4040);
+        displayedImage.setImageResource(R.drawable.gridsquare4040);
+        //displayedImage.setBackgroundResource(R.drawable.gridsquare4040);
     }
 
 
@@ -97,13 +87,16 @@ handle the images inside an activity, getresoureces doesnt work outside of an ac
     }
 
     public void incrementAdjacentMineCounter() {
-        adjacentMineCounter = adjacentMineCounter+1;
+        adjacentMineCounter = adjacentMineCounter + 1;
     }
 
     public boolean isPressed() {
         return pressed;
     }
 
+    public Point getRowColumn(){
+        return rowColumn;
+    }
 
     public void callByName(String funcName) {
         try {
@@ -124,90 +117,28 @@ handle the images inside an activity, getresoureces doesnt work outside of an ac
 
 
 
+    // todo sort out stackoverflow caused by cascade of setActualImages (where most of the board has no cells and theres lots of cells to laod at once .e.g 20x20)
     private void setActualCellImage() {
-
 
 
         if (isHasMine()) {
 
-            displayedImage.setBackgroundResource(R.drawable.gridsquaremine);
+            displayedImage.setImageResource(R.drawable.gridsquaremine);
 
         } else {
 
-           // actualCellImage.setImageResource(R.drawable.gridsquare1big);
-            displayedImage.setBackgroundResource(mCellIcons[adjacentMineCounter]);
 
-        /*
-        switch(adjacentMineCounter){
-
-            case 0: actualCellImage= Resources.getSystem().getDrawable(R.drawable.gridsquare0);
-                break;
-
-
-            case 1: actualCellImage= Resources.getSystem().getDrawable(R.drawable.gridsquare7);
-                break;
-
-
-            case 2: actualCellImage= Resources.getSystem().getDrawable(R.drawable.gridsquare2);
-                break;
-
-            case 3:  actualCellImage= Resources.getSystem().getDrawable(R.drawable.gridsquare3);
-                break;
-
-            case 4: actualCellImage= Resources.getSystem().getDrawable(R.drawable.gridsquare4);
-                break;
-
-            case 5: actualCellImage= Resources.getSystem().getDrawable(R.drawable.gridsquare5);
-                break;
-
-            case 6: actualCellImage= Resources.getSystem().getDrawable(R.drawable.gridsquare7);
-                break;
-
-            case 7: actualCellImage= Resources.getSystem().getDrawable(R.drawable.gridsquare7);
-                break;
-
-            case 8: actualCellImage= Resources.getSystem().getDrawable(R.drawable.gridsquare7);
-                break;
-
-            case 9: actualCellImage= Resources.getSystem().getDrawable(R.drawable.gridsquare7);
-                break;
-
-
-            default:
-
+            displayedImage.setImageResource(mCellIcons[adjacentMineCounter]);
 
 
         }
-*/
-
-
-        }
-
-/*
-
-
-    else {
-
-      //  int idOfImageResourceFile = new String();
-        nameOfImageFile = "Resources.getSystem().getDrawable(R.drawable.gridsquare"
-                + adjacentMineCounter;
-
-    // only necessary to use big if the want big icons
-    //+ "Big"
-
-        callByName(actualCellImage);
-
-
-    //    actualCellImage= Resources.getSystem().getDrawable(nameOfImageFile);
     }
-*/
 
-    }
 
     public ImageView getDisplayedImage() {
 
-       // displayedImage.setAdjustViewBounds(true);
-       // displayedImage.setScaleType(ImageView.ScaleType.FIT_XY);
+        // displayedImage.setAdjustViewBounds(true);
+        // displayedImage.setScaleType(ImageView.ScaleType.FIT_XY);
         return displayedImage;
 
     }
@@ -215,7 +146,7 @@ handle the images inside an activity, getresoureces doesnt work outside of an ac
     public void togglePressed() {
         pressed = !pressed;
         if (pressed) {
-           // System.out.println("press detection working");
+            // System.out.println("press detection working");
             setActualCellImage();
 
         }

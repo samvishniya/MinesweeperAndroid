@@ -48,6 +48,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // remove actionbar at top
+        try {
+            this.getSupportActionBar().hide();
+        } catch (NullPointerException e) {
+        }
+
+
         setContentView(R.layout.activity_main);
 
         // assign id values to each variable using findviewbyid to initialize them
@@ -59,11 +67,9 @@ public class MainActivity extends AppCompatActivity {
         userInputField.setFilters(new InputFilter[]{new InputFilterMinMax("3", "20")});
 
         submitGridSizeButton = findViewById(R.id.submitButton);
-
         gridSizeQuestionText = findViewById(R.id.gridSizeQuestionText);
 
         timer = findViewById(R.id.timer);
-
         layout = (ViewGroup) submitGridSizeButton.getParent();
 
         // submit button
@@ -74,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 int gridSizeNumber = Integer.parseInt(userInputField.getText().toString());
                 if (gridSizeNumber >= 3 && gridSizeNumber <= 20) {
 
+                    // todo make separate view for pre-game, game, and post-game (highscore) - this will make the view.gone stuff redundant i think
                     // here im showing 2 diff methods of removing a view - view.gone, and .removeview
                     submitGridSizeButton.setVisibility(View.GONE);
                     gridSizeQuestionText.setVisibility(View.GONE);
@@ -83,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
                         timer.setVisibility(View.VISIBLE);
                     }
                     populateButtons(gridSizeNumber);
+                    timer.start();
                 }
             }
 
@@ -92,30 +100,30 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+    public void gameReset(boolean gameWon){
+    timer.stop();
+    timer.getText();
+
+        if( gameWon) {
+
+        }
+
+        else {
 
 
+        }
 
 
-
-
-
-
-
-
+    }
     private void populateButtons(int gridSize) {
 
 
         gridSquaresCount = gridSize * gridSize;
         final Minefield gameMineField = new Minefield(gridSize, this);
 
-
-        //   table.setShrinkAllColumns(true);
-
-        //  table.setStretchAllColumns(true);
-
         //  table.layout
         android.support.v7.widget.GridLayout grid = findViewById(R.id.xmlGrid);
-        grid.setAlignmentMode(GridLayout.ALIGN_BOUNDS);
+        //  grid.setAlignmentMode(GridLayout.ALIGN_MARGINS);
         grid.setColumnCount(gridSize);
         grid.setRowCount(gridSize);
 
@@ -125,32 +133,31 @@ public class MainActivity extends AppCompatActivity {
 
             for (int columnNum = 0; columnNum <= gridSize - 1; columnNum++) {
 
+                // add imageviews according to size first,
+                // ImageView cellBtn = new ImageView(this);
+                //cellBtn.setImageResource(R.drawable.gridsquare0);
+
+                // then add images to imageview
 
                 ImageView cellBtn = (gameMineField.getCellContent(rowNum, columnNum).getDisplayedImage());
-              //  cellBtn.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                cellBtn.setAdjustViewBounds(true);
-              //  cellBtn.setMaxWidth();
+                //  cellBtn.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                //  cellBtn.setAdjustViewBounds(true);
+                //  cellBtn.setMaxWidth();
                 grid.addView(cellBtn);
-                android.support.v7.widget.GridLayout.LayoutParams param =new  android.support.v7.widget.GridLayout.LayoutParams();
-                param.height = android.support.v7.widget.GridLayout.LayoutParams.MATCH_PARENT;
-            param.width = android.support.v7.widget.GridLayout.LayoutParams.MATCH_PARENT;
-
-               // param.rightMargin = 5;
-              //  param.topMargin = 5;
-                //param.setGravity(Gravity.FILL);
+                android.support.v7.widget.GridLayout.LayoutParams param = new android.support.v7.widget.GridLayout.LayoutParams();
+                param.height = grid.getHeight() / grid.getRowCount() - param.topMargin - param.bottomMargin;
+                param.width = grid.getWidth() / grid.getColumnCount() - param.rightMargin - param.leftMargin;
+                param.leftMargin = 0;
+                param.rightMargin = 0;
+                param.setGravity(Gravity.FILL_HORIZONTAL);
                 param.columnSpec = android.support.v7.widget.GridLayout.spec(columnNum);
                 param.rowSpec = android.support.v7.widget.GridLayout.spec(rowNum);
 
 
+                cellBtn.setLayoutParams(param);
 
 
-
-                cellBtn.setLayoutParams (param);
-
-
-
-// todo sort out margins
-
+                // todo fix these finals
                 final int finalRowNum = rowNum;
                 final int finalColumnNum = columnNum;
                 cellBtn.setOnClickListener(new ImageView.OnClickListener() {
@@ -158,15 +165,13 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(View v) {
 
 
-                        // toggle first, then get new image, then disable clickable
-                        gameMineField.getCellContent(finalRowNum, finalColumnNum).togglePressed();
-
+                        // toggle first, then get new image, then disable clickable,
+                        // and if this cell was 'safe' toggle a cascade of all neighbouring cells
+                        gameMineField.revealCell(finalRowNum, finalColumnNum);
 
                     }
+
                 });
-
-                //   tableRow.set
-
             }
 
         }
