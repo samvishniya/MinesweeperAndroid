@@ -1,60 +1,35 @@
 package com.example.vishniya.minesweeperandroid;
 
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
+import android.content.Intent;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.text.InputFilter;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Chronometer;
 import android.widget.EditText;
-import android.widget.GridLayout;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.ToggleButton;
+import android.widget.Toast;
 
 import Logic.InputFilterMinMax;
-import Logic.Minecell;
-import Logic.Minefield;
+// todo make separate view for pre-game, game, and post-game (highscore) - this will make the view.gone stuff redundant i think
 
 public class MainActivity extends AppCompatActivity {
-
-    // global variables
 
     private EditText userInputField;
     private Button submitGridSizeButton;
     private TextView gridSizeQuestionText;
-    private Chronometer timer;
-
-
     private ViewGroup layout;
+    private static int MIN_GRID_SIZE = 3;
+    private static int MAX_GRID_SIZE =20;
+    public static final String EXTRA_GRID_SIZE = "com.example.vishniya.minesweeperandroid.mainactivity.EXTRA.int";
 
-
-// TODO add reset button to go again
-    // TODO ADD functionality to reset after game over
-    // TODO INTEGRATE WITH HIGHSCORE database
-
-
-    private int gridSquaresCount;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // remove actionbar at top
-        try {
-            this.getSupportActionBar().hide();
-        } catch (NullPointerException e) {
-        }
-
 
         setContentView(R.layout.activity_main);
 
@@ -69,114 +44,32 @@ public class MainActivity extends AppCompatActivity {
         submitGridSizeButton = findViewById(R.id.submitButton);
         gridSizeQuestionText = findViewById(R.id.gridSizeQuestionText);
 
-        timer = findViewById(R.id.timer);
-        layout = (ViewGroup) submitGridSizeButton.getParent();
 
         // submit button
         submitGridSizeButton.setOnClickListener(new View.OnClickListener() {
             @Override
+
+            // start minesweepergame if submitted gridsize is acceptable
             public void onClick(View v) {
 
                 int gridSizeNumber = Integer.parseInt(userInputField.getText().toString());
-                if (gridSizeNumber >= 3 && gridSizeNumber <= 20) {
+                if (gridSizeNumber >= MIN_GRID_SIZE && gridSizeNumber <= MAX_GRID_SIZE) {
 
-                    // todo make separate view for pre-game, game, and post-game (highscore) - this will make the view.gone stuff redundant i think
-                    // here im showing 2 diff methods of removing a view - view.gone, and .removeview
-                    submitGridSizeButton.setVisibility(View.GONE);
-                    gridSizeQuestionText.setVisibility(View.GONE);
+              Intent intent = new Intent(MainActivity.this, MinesweeperGameActivity.class);
 
-                    if (null != layout) {
-                        layout.removeView(userInputField);
-                        timer.setVisibility(View.VISIBLE);
-                    }
-                    populateButtons(gridSizeNumber);
-                    timer.start();
+              intent.putExtra(EXTRA_GRID_SIZE, gridSizeNumber);
+
+                startActivity(intent);
+
+                }
+
+                else {
+                    Toast.makeText(MainActivity.this, "Please choose a size between"+MIN_GRID_SIZE + " and " + MAX_GRID_SIZE,Toast.LENGTH_SHORT );
                 }
             }
 
         });
-        // int size = getUserInputGridSize();
-        //       populateButtons(6);
-
 
     }
-    public void gameReset(boolean gameWon){
-    timer.stop();
-    timer.getText();
-
-        if( gameWon) {
-
-        }
-
-        else {
-
-
-        }
-
-
-    }
-    private void populateButtons(int gridSize) {
-
-
-        gridSquaresCount = gridSize * gridSize;
-        final Minefield gameMineField = new Minefield(gridSize, this);
-
-        //  table.layout
-        android.support.v7.widget.GridLayout grid = findViewById(R.id.xmlGrid);
-        //  grid.setAlignmentMode(GridLayout.ALIGN_MARGINS);
-        grid.setColumnCount(gridSize);
-        grid.setRowCount(gridSize);
-
-
-        for (int rowNum = 0; rowNum <= gridSize - 1; rowNum++) {
-
-
-            for (int columnNum = 0; columnNum <= gridSize - 1; columnNum++) {
-
-                // add imageviews according to size first,
-                // ImageView cellBtn = new ImageView(this);
-                //cellBtn.setImageResource(R.drawable.gridsquare0);
-
-                // then add images to imageview
-
-                ImageView cellBtn = (gameMineField.getCellContent(rowNum, columnNum).getDisplayedImage());
-                //  cellBtn.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                //  cellBtn.setAdjustViewBounds(true);
-                //  cellBtn.setMaxWidth();
-                grid.addView(cellBtn);
-                android.support.v7.widget.GridLayout.LayoutParams param = new android.support.v7.widget.GridLayout.LayoutParams();
-                param.height = grid.getHeight() / grid.getRowCount() - param.topMargin - param.bottomMargin;
-                param.width = grid.getWidth() / grid.getColumnCount() - param.rightMargin - param.leftMargin;
-                param.leftMargin = 0;
-                param.rightMargin = 0;
-                param.setGravity(Gravity.FILL_HORIZONTAL);
-                param.columnSpec = android.support.v7.widget.GridLayout.spec(columnNum);
-                param.rowSpec = android.support.v7.widget.GridLayout.spec(rowNum);
-
-
-                cellBtn.setLayoutParams(param);
-
-
-                // todo fix these finals
-                final int finalRowNum = rowNum;
-                final int finalColumnNum = columnNum;
-                cellBtn.setOnClickListener(new ImageView.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-
-                        // toggle first, then get new image, then disable clickable,
-                        // and if this cell was 'safe' toggle a cascade of all neighbouring cells
-                        gameMineField.revealCell(finalRowNum, finalColumnNum);
-
-                    }
-
-                });
-            }
-
-        }
-
-    }
-
 
 }

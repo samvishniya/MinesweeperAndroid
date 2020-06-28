@@ -124,12 +124,13 @@ public class Minefield {
 
     // sets actual cell image according to amount of neighbouring mines
 // todo method to check if ALL cells already revealed -> gameWon =true/false ->
-    public void revealCell(int finalRowNum, int finalColumnNum) {
+    public boolean revealCell(int finalRowNum, int finalColumnNum) {
 
         fieldArray[finalRowNum][finalColumnNum].togglePressed();
 
         if  (fieldArray[finalRowNum][finalColumnNum].isHasMine()){
             gameWon = false;
+            return true;
         }
 
 
@@ -138,7 +139,7 @@ public class Minefield {
             cascadeBlankCellReveal(finalRowNum, finalColumnNum);
         }
 
-
+    return false;
     }
 
 
