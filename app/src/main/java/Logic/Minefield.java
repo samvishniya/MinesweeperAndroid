@@ -25,12 +25,15 @@ public class Minefield {
     private int dimension;
     private Context context;
     private boolean gameWon; //todo when this is true move back to previous view
+    private int unrevealedCellsCount;
 
     // TODO ADD DIFFICULTY AS A PARAMETER AND CODE IT
     public Minefield(int dimension, Context context) {
         this.context = context;
         this.dimension = dimension;
         totalMinesNeeded = dimension;
+        unrevealedCellsCount = dimension*dimension;
+
         fieldArray = new Minecell[dimension][dimension];
         listOfMines = new ArrayList();
 
@@ -58,6 +61,11 @@ public class Minefield {
                 fieldArray[x][y] = new Minecell(new Point(x, y), context);
             }
         }
+    }
+
+
+    public int getUnrevealedCellsCount(){
+        return unrevealedCellsCount;
     }
 
     // generates 1 mine at a random non-mine location
@@ -122,9 +130,14 @@ public class Minefield {
     }
 
 
-    // sets actual cell image according to amount of neighbouring mines
+
+    /*
+     * sets actual cell image according to amount of neighbouring mines
+     * Also determines if cell in focus is a mine (true) or not (false)
+     */
 // todo method to check if ALL cells already revealed -> gameWon =true/false ->
     public boolean revealCell(int finalRowNum, int finalColumnNum) {
+        unrevealedCellsCount--;
 
         fieldArray[finalRowNum][finalColumnNum].togglePressed();
 

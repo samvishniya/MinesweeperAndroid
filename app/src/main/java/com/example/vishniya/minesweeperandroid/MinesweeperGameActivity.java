@@ -1,14 +1,9 @@
 package com.example.vishniya.minesweeperandroid;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayout;
-import android.text.InputFilter;
-import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 
@@ -17,6 +12,8 @@ import android.widget.Chronometer;
 import android.widget.ImageView;
 
 import android.widget.TextView;
+
+import com.example.vishniya.minesweeperandroid.Activities.HighscoreActivity;
 
 import Logic.Minefield;
 
@@ -32,16 +29,16 @@ public class MinesweeperGameActivity extends AppCompatActivity {
     private Chronometer timer;
     private TextView completionTime;
 
+    public static final String EXTRA_SCORE = "com.example.vishniya.minesweeperandroid.EXTRA.score";
+
+
     private int gridSizeNumber;
-    private int gridSquaresCount;
-    private int screen_width;
-    private int screen_height;
+
     private android.support.v7.widget.GridLayout grid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
 
         // remove actionbar at top
@@ -57,26 +54,54 @@ public class MinesweeperGameActivity extends AppCompatActivity {
 
         completionTime = findViewById(R.id.textView);
 
-        timer=findViewById(R.id.timer);
+        timer = findViewById(R.id.timer);
 
         timer.setBase(SystemClock.elapsedRealtime());
         timer.start();
 
         grid = findViewById(R.id.xmlGrid);
 
-        grid.post(new Runnable(){
-            @Override
-            public void run(){
-                populateButtons(gridSizeNumber);
-            }
+        grid.post(new Runnable() {
+                      @Override
+                      public void run() {
+                          populateButtons(gridSizeNumber);
+                      }
                   }
 
 
         );
 
+    }
 
+    /*
+Returns the elapsed time in ms
+ */
+
+    private int findElapsedTime() {
+        return (int) (SystemClock.elapsedRealtime() - timer.getBase());
+    }
+
+/*
+Returns a score based on the size of the grid and the time taken
+ */
+
+    private int calcScore() {
+        return gridSizeNumber * gridSizeNumber * 1000 / (findElapsedTime() / 10);
 
     }
+
+    /*
+    launches HighScoreActivity and sends an intent with your highscore (time)
+     */
+    private void startHighScoreActivity() {
+
+        Intent intent = new Intent(MinesweeperGameActivity.this, HighscoreActivity.class);
+        intent.putExtra("EXTRA_SCORE", calcScore());
+        startActivity(intent);
+
+    }
+
+
 /*
     private void findScreenResolution() {
         DisplayMetrics dm = new DisplayMetrics();
@@ -88,28 +113,36 @@ public class MinesweeperGameActivity extends AppCompatActivity {
 */
 
     /*
-    // todo     Resets the game, sending you back to the mainactivity and clock
+     * Ends the game/grid
+     * if a loss, shows textview then sends you to main
+     * if a win, shows at extview then sends you to the highscoreactivity
+     * todo     Resets the game, sending you back to the mainactivity and clock
+     *  todo reset game if won, but towards highscore database
+     *
      */
     public void gameReset(boolean gameWon) {
         timer.stop();
-        timer.getText();
+
+        completionTime.setText(String.valueOf(findElapsedTime() / 1000));
 
         if (gameWon) {
+            startHighScoreActivity();
 
         } else {
 
         }
+
+        finish();
     }
 
 
     /*
     creates the buttons for the minesweeper grid
      */
-    private void populateButtons(int gridSize) {
+    private void populateButtons(final int gridSize) {
 
 
-        gridSquaresCount = gridSize * gridSize;
-         final Minefield gameMineField = new Minefield(gridSize, this);
+        final Minefield gameMineField = new Minefield(gridSize, this);
 
         //  table.layout
 
@@ -119,8 +152,7 @@ public class MinesweeperGameActivity extends AppCompatActivity {
         grid.setUseDefaultMargins(false);
 
 
-
-       // int cellSize = grid.getWidth()/gridSize - grid.get
+        // int cellSize = grid.getWidth()/gridSize - grid.get
 
         for (int rowNum = 0; rowNum <= gridSize - 1; rowNum++) {
 
@@ -139,8 +171,8 @@ public class MinesweeperGameActivity extends AppCompatActivity {
                 //  cellBtn.setMaxWidth();
                 android.support.v7.widget.GridLayout.LayoutParams param = new android.support.v7.widget.GridLayout.LayoutParams();
 
-        param.setMargins(1, 1, 0, 0);
-                param.width =( grid.getWidth()-param.rightMargin-param.leftMargin)/ gridSize- param.rightMargin - param.leftMargin;
+                param.setMargins(1, 1, 0, 0);
+                param.width = (grid.getWidth() - param.rightMargin - param.leftMargin) / gridSize - param.rightMargin - param.leftMargin;
                 param.height = param.width;
 
                 param.setGravity(Gravity.FILL_HORIZONTAL);
@@ -155,21 +187,20 @@ public class MinesweeperGameActivity extends AppCompatActivity {
                 final int finalRowNum = rowNum;
                 final int finalColumnNum = columnNum;
                 cellBtn.setOnClickListener(new ImageView.OnClickListener() {
+
+                    // reveals the contents of the cell
+                    // depending its the final cell, or a mine, or both or neither, game may stop
+                    // calculating cells reamining is difficult due to cascade method inside minefield - now done internally in minefield class.
                     @Override
                     public void onClick(View v) {
-
-
                         // toggle first, then get new image, then disable clickable,
                         // and if this cell was 'safe' toggle a cascade of all neighbouring cells
                         if (gameMineField.revealCell(finalRowNum, finalColumnNum)) {
-                            timer.stop();
-                            // this gets the time in seconds since game started
-                            // todo send this to a highscore database
-                            int elapsed = (int) (SystemClock.elapsedRealtime() - timer.getBase()) / 1000;
-
-                            completionTime.setText(String.valueOf(elapsed));
+                            gameReset(false);
                         }
-
+                        if (gameMineField.getUnrevealedCellsCount() < gridSize + 1) {
+                            gameReset(true);
+                        }
                     }
 
                 });
