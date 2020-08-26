@@ -5,4 +5,5 @@
     <string name="enter_a_number_between_3_20">Enter a number between 3–20</string>
     <string name="_3_20">3–20</string>
     <string name="submit">submit</string>
+    <string name="placeholder_highscore">00000</string>
 </resources>

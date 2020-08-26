@@ -5,7 +5,6 @@ import android.content.res.Resources;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
-import android.support.v4.widget.ImageViewCompat;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -31,7 +30,8 @@ public class Minefield {
     public Minefield(int dimension, Context context) {
         this.context = context;
         this.dimension = dimension;
-        totalMinesNeeded = dimension;
+        // todo change mines back to dimenson()
+        totalMinesNeeded = 1;
         unrevealedCellsCount = dimension*dimension;
 
         fieldArray = new Minecell[dimension][dimension];

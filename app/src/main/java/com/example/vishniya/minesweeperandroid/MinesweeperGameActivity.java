@@ -2,21 +2,37 @@ package com.example.vishniya.minesweeperandroid;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.SystemClock;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 
 import android.widget.Chronometer;
 
+import android.widget.GridLayout;
 import android.widget.ImageView;
 
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.vishniya.minesweeperandroid.Activities.HighscoreActivity;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.vishniya.minesweeperandroid.Data.highscoreroomdatabase2.HighScoreInterface;
 
 import Logic.Minefield;
 
+/*
+Win low
+Game ->popupwindow -> showhighscore but no entry
+
+Win high ->popup -> enter highscore
+
+Lose -> popup -> back to game setup menu
+ */
 
 // TODO add reset button to go again
 // TODO ADD functionality to reset after game over
@@ -29,12 +45,13 @@ public class MinesweeperGameActivity extends AppCompatActivity {
     private Chronometer timer;
     private TextView completionTime;
 
+
     public static final String EXTRA_SCORE = "com.example.vishniya.minesweeperandroid.EXTRA.score";
 
 
     private int gridSizeNumber;
 
-    private android.support.v7.widget.GridLayout grid;
+    private androidx.gridlayout.widget.GridLayout grid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,18 +103,69 @@ Returns a score based on the size of the grid and the time taken
  */
 
     private int calcScore() {
-        return gridSizeNumber * gridSizeNumber * 1000 / (findElapsedTime() / 10);
+        return gridSizeNumber * gridSizeNumber * 10000 / (findElapsedTime() / 10);
 
     }
 
     /*
     launches HighScoreActivity and sends an intent with your highscore (time)
      */
-    private void startHighScoreActivity() {
 
-        Intent intent = new Intent(MinesweeperGameActivity.this, HighscoreActivity.class);
-        intent.putExtra("EXTRA_SCORE", calcScore());
-        startActivity(intent);
+    private void showGameFinishedPopupWindow(final Boolean gameWon, final int score) {
+
+
+        // inflate the layout of the popup window
+        LayoutInflater inflater = (LayoutInflater)
+                getSystemService(LAYOUT_INFLATER_SERVICE);
+        // todo what should that nukll be?
+        View popupView = inflater.inflate(R.layout.popup_window, null);
+
+        // create the popup window
+        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        boolean focusable = true; // lets taps outside the popup also dismiss it
+        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+
+        // show the popup window
+        // which view you pass in doesn't matter, it is only used for the window tolken
+        popupWindow.showAtLocation(grid, Gravity.CENTER, 0, 0);
+        // with a popupwindow you can only access its contents using getcontentview(
+        TextView popupText = popupWindow.getContentView().findViewById(R.id.popup_text);
+
+        String endMessage = "You Lost";
+        if (gameWon) {
+            endMessage = "You won " + "with a score of " + score;
+        } else {
+
+        }
+        popupText.setText(endMessage);
+
+        // dismiss the popup window when touched
+        popupView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+
+                popupWindow.dismiss();
+                if (gameWon) {
+                    startHighScoreActivity(score);
+                } else {
+                    gameReset();
+                }
+
+                return true;
+            }
+        });
+
+    }
+
+
+    private void startHighScoreActivity(int score) {
+           Intent intent = new Intent(this, HighScoreInterface.class);
+            intent.putExtra("EXTRA_SCORE", score);
+
+            startActivity(intent);
+
 
     }
 
@@ -118,19 +186,11 @@ Returns a score based on the size of the grid and the time taken
      * if a win, shows at extview then sends you to the highscoreactivity
      * todo     Resets the game, sending you back to the mainactivity and clock
      *  todo reset game if won, but towards highscore database
+     *   todo change this to fit in with new highscore module not original activity -- or just delete it?
      *
      */
-    public void gameReset(boolean gameWon) {
-        timer.stop();
+    public void gameReset() {
 
-        completionTime.setText(String.valueOf(findElapsedTime() / 1000));
-
-        if (gameWon) {
-            startHighScoreActivity();
-
-        } else {
-
-        }
 
         finish();
     }
@@ -169,15 +229,15 @@ Returns a score based on the size of the grid and the time taken
                 //  cellBtn.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 //  cellBtn.setAdjustViewBounds(true);
                 //  cellBtn.setMaxWidth();
-                android.support.v7.widget.GridLayout.LayoutParams param = new android.support.v7.widget.GridLayout.LayoutParams();
+               GridLayout.LayoutParams param = new GridLayout.LayoutParams();
 
                 param.setMargins(1, 1, 0, 0);
                 param.width = (grid.getWidth() - param.rightMargin - param.leftMargin) / gridSize - param.rightMargin - param.leftMargin;
                 param.height = param.width;
 
                 param.setGravity(Gravity.FILL_HORIZONTAL);
-                param.columnSpec = android.support.v7.widget.GridLayout.spec(columnNum);
-                param.rowSpec = android.support.v7.widget.GridLayout.spec(rowNum);
+                param.columnSpec = GridLayout.spec(columnNum);
+                param.rowSpec = GridLayout.spec(rowNum);
 
 
                 cellBtn.setLayoutParams(param);
@@ -196,10 +256,18 @@ Returns a score based on the size of the grid and the time taken
                         // toggle first, then get new image, then disable clickable,
                         // and if this cell was 'safe' toggle a cascade of all neighbouring cells
                         if (gameMineField.revealCell(finalRowNum, finalColumnNum)) {
-                            gameReset(false);
+                            timer.stop();
+
+                            completionTime.setText(String.valueOf(findElapsedTime() / 1000));
+                            // score of 0 since lost
+                            showGameFinishedPopupWindow(false, 0);
                         }
                         if (gameMineField.getUnrevealedCellsCount() < gridSize + 1) {
-                            gameReset(true);
+                            timer.stop();
+                            int score = calcScore();
+                            //todo maybe change this completion time text view...?
+                            completionTime.setText(String.valueOf(findElapsedTime() / 1000));
+                            showGameFinishedPopupWindow(true, score);
                         }
                     }
 
